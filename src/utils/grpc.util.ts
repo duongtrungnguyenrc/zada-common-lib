@@ -1,6 +1,5 @@
 import * as protoLoader from "@grpc/proto-loader";
 import * as grpc from "@grpc/grpc-js";
-import * as path from "path";
 
 export class GrpcClient {
   private static instances: Map<string, GrpcClient> = new Map();
@@ -9,13 +8,11 @@ export class GrpcClient {
   private client: any;
 
   private constructor(
-    protoFileName: string,
+    protoPath: string,
     private packageName: string,
     private serviceName: string,
     private url: string
   ) {
-    const protoPath = path.join(__dirname, "protos", protoFileName);
-
     const packageDefinition = protoLoader.loadSync(protoPath, {
       keepCase: true,
       longs: String,
@@ -45,16 +42,16 @@ export class GrpcClient {
   }
 
   static getInstance(
-    protoFileName: string,
+    protoPath: string,
     packageName: string,
     serviceName: string,
     url: string
   ) {
-    const key = `${protoFileName}|${packageName}|${serviceName}|${url}`;
+    const key = `${protoPath}|${packageName}|${serviceName}|${url}`;
     if (!GrpcClient.instances.has(key)) {
       GrpcClient.instances.set(
         key,
-        new GrpcClient(protoFileName, packageName, serviceName, url)
+        new GrpcClient(protoPath, packageName, serviceName, url)
       );
     }
     return GrpcClient.instances.get(key);
