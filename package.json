@@ -1,7 +1,7 @@
 {
   "name": "@duongtrungnguyen/micro-commerce",
   "author": "Duong Trung Nguyen",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Helper library for zada e-commerce platform project",
   "license": "MIT",
   "engines": {
@@ -41,6 +41,7 @@
     "@nestjs/microservices": ">=10.0.0",
     "@nestjs/platform-express": ">=10.0.0",
     "@nestjs/typeorm": ">=10.0.0",
+    "@nestjs/swagger": ">=10.0.0",
     "nestjs-i18n": ">=10.0.0",
     "rxjs": ">=6.0.0",
     "typeorm": ">=0.3.23"
