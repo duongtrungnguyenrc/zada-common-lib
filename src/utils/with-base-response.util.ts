@@ -9,11 +9,17 @@ export function withBaseResponse<TData extends Constructor>(Data: TData, options
     @ApiProperty({ type: String })
     message: string;
 
+    @ApiProperty({ type: Date, example: new Date() })
+    timestamp?: Date;
+
+    @ApiProperty({ type: Number })
+    code?: number;
+
     @ApiProperty({
       type: () => Data,
       ...options,
     })
-    data: InstanceType<TData>;
+    data?: InstanceType<TData>;
   }
 
   return mixin(ResponseVM);
