@@ -6,4 +6,10 @@ export class ResponseVM<T = any> {
 
   @ApiProperty({ type: Object, required: false })
   data?: T;
+
+  @ApiProperty({ type: Date, example: new Date() })
+  timestamp?: Date;
+
+  @ApiProperty({ type: Number })
+  code?: number;
 }
