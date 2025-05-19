@@ -1,13 +1,13 @@
-import { ApiProperty } from "@nestjs/swagger";
 import { IsNumber, IsOptional } from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
 
-export class PageableDto {
-  @ApiProperty()
+export class PagingDto {
+  @ApiProperty({ type: Number, default: 1 })
   @IsNumber()
   @IsOptional()
   page: number = 1;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, default: 20 })
   @IsNumber()
   @IsOptional()
   size: number = 20;

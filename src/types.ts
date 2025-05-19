@@ -5,11 +5,6 @@ export type UserAgent = {
   ua: string;
 };
 
-export type Pageable = {
-  page: number;
-  limit: number;
-};
-
 export type JwtPayloadContent = {
   sub: string;
   jit: string;
@@ -19,3 +14,5 @@ export type JwtPayload = JwtPayloadContent & {
   exp: number;
   iat: number;
 };
+
+export type Constructor<T = {}> = new (...args: any[]) => T;

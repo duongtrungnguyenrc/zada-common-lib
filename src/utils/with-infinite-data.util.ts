@@ -1,11 +1,11 @@
 import { ApiExtraModels, ApiPropertyOptions, ApiProperty } from "@nestjs/swagger";
 import { mixin } from "@nestjs/common";
 
-import { Constructor, InfiniteData } from "../types";
+import { Constructor } from "../types";
 
-export function withInfiniteResponseUtil<TData extends Constructor>(Data: TData, options?: ApiPropertyOptions) {
+export function withInfiniteData<TData extends Constructor>(Data: TData, options?: ApiPropertyOptions) {
   @ApiExtraModels(Data)
-  class PagingVM implements InfiniteData<InstanceType<TData>> {
+  class InfiniteDataVM {
     @ApiProperty({ type: Number })
     nextPage: number;
 
@@ -16,5 +16,5 @@ export function withInfiniteResponseUtil<TData extends Constructor>(Data: TData,
     data: Array<InstanceType<TData>>;
   }
 
-  return mixin(PagingVM);
+  return mixin(InfiniteDataVM);
 }

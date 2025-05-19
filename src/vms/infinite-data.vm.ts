@@ -1,11 +1,9 @@
-import { ApiResponseProperty } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 
-import { InfiniteResponse } from "../types";
-
-export class InfiniteResponseVM<T = any> implements InfiniteResponse<T> {
-  @ApiResponseProperty()
+export class InfiniteDataVM<T = any> {
+  @ApiProperty({ type: Array as () => T[] })
   data: T[];
 
-  @ApiResponseProperty()
+  @ApiProperty({ type: Number, example: 2 })
   nextPage?: number;
 }

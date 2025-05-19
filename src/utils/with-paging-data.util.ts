@@ -4,7 +4,7 @@ import { mixin } from "@nestjs/common";
 import { Constructor } from "../types";
 import { PagingMetaVM } from "../vms";
 
-export function withPagingResponse<TData extends Constructor>(Data: TData, options?: ApiPropertyOptions) {
+export function withPagingData<TData extends Constructor>(Data: TData, options?: ApiPropertyOptions) {
   @ApiExtraModels(Data)
   class PagingDataVM {
     @ApiProperty({ type: PagingMetaVM })

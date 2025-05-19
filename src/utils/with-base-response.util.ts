@@ -1,25 +1,19 @@
-import { ApiPropertyOptions, ApiResponseProperty } from "@nestjs/swagger";
-import { IsString, ValidateNested } from "class-validator";
-import { Type } from "class-transformer";
+import { ApiExtraModels, ApiPropertyOptions, ApiProperty } from "@nestjs/swagger";
 import { mixin } from "@nestjs/common";
 
-import { TResponseVM } from "../types";
+import { Constructor } from "../types";
 
-type Constructor<T = {}> = new (...args: any[]) => T;
-
-export function withResponseVM<TBase extends Constructor>(Base: TBase, options?: ApiPropertyOptions) {
-  class ResponseVM implements TResponseVM<InstanceType<TBase>> {
-    @ApiResponseProperty()
-    @IsString()
+export function withBaseResponse<TData extends Constructor>(Data: TData, options?: ApiPropertyOptions) {
+  @ApiExtraModels(Data)
+  class ResponseVM {
+    @ApiProperty({ type: String })
     message: string;
 
-    @ApiResponseProperty({
-      type: Base,
+    @ApiProperty({
+      type: () => Data,
       ...options,
     })
-    @Type(() => Base)
-    @ValidateNested({ each: true })
-    data: InstanceType<TBase>;
+    data: InstanceType<TData>;
   }
 
   return mixin(ResponseVM);

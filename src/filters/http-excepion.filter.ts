@@ -6,7 +6,7 @@ import { QueryFailedError } from "typeorm";
 import { I18nContext } from "nestjs-i18n";
 
 @Catch()
-export class GlobalExceptionsFilter implements ExceptionFilter {
+export class HttpExceptionsFilter implements ExceptionFilter {
   async catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
