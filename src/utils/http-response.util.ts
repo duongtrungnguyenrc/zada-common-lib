@@ -5,7 +5,7 @@ export class HttpResponse {
     return {
       message,
       data,
-      code: 200,
+      statusCode: 200,
       timestamp: new Date(),
     };
   }
@@ -14,7 +14,7 @@ export class HttpResponse {
     return {
       message,
       data,
-      code: 201,
+      statusCode: 201,
       timestamp: new Date(),
     };
   }

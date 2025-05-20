@@ -8,8 +8,8 @@ export class ResponseVM<T = any> {
   data?: T;
 
   @ApiProperty({ type: Date, example: new Date() })
-  timestamp?: Date;
+  timestamp: Date;
 
   @ApiProperty({ type: Number })
-  code?: number;
+  statusCode: number;
 }

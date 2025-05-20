@@ -10,10 +10,10 @@ export function withBaseResponse<TData extends Constructor>(Data: TData, options
     message: string;
 
     @ApiProperty({ type: Date, example: new Date() })
-    timestamp?: Date;
+    timestamp: Date;
 
     @ApiProperty({ type: Number })
-    code?: number;
+    statusCode: number;
 
     @ApiProperty({
       type: () => Data,

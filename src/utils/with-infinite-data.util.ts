@@ -10,7 +10,7 @@ export function withInfiniteData<TData extends Constructor>(Data: TData, options
     nextPage: number;
 
     @ApiProperty({
-      type: () => Data,
+      type: () => [Data],
       ...options,
     })
     data: Array<InstanceType<TData>>;

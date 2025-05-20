@@ -1,11 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class ForbiddenExceptionVM {
-  @ApiProperty({ type: String, example: "error message" })
+  @ApiProperty({ type: String, example: "Error message" })
   message: string;
 
-  @ApiProperty({ type: String, example: "Forbidden" })
-  error: string;
+  @ApiProperty({ type: String, example: "/example" })
+  path: string;
+
+  @ApiProperty({ type: Date, example: new Date() })
+  timestamp: Date;
 
   @ApiProperty({ type: Number, example: 403 })
   statusCode: number;

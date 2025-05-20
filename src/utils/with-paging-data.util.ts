@@ -11,7 +11,7 @@ export function withPagingData<TData extends Constructor>(Data: TData, options?:
     meta: PagingMetaVM;
 
     @ApiProperty({
-      type: () => Data,
+      type: () => [Data],
       ...options,
     })
     data: Array<InstanceType<TData>>;
