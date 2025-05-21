@@ -7,7 +7,7 @@ export const joinCacheKey = (...keys: string[]) => {
 export const extractAuthToken = (request: Request): string | undefined => {
   const token = request.headers["authorization"];
 
-  const [, jwtToken] = token?.split(" ");
+  const [, jwtToken] = token?.split(" ") || [];
 
   return jwtToken;
 };
