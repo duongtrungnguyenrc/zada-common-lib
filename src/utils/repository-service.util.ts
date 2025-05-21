@@ -28,7 +28,7 @@ type UniqueCheckOption<Entity> = {
 /// ----
 
 @Injectable()
-export class TypeormRepository<Entity> {
+export class RepositoryService<Entity> {
   constructor(private readonly repository: Repository<Entity>) {}
 
   private buildFilterFromFields<T>(data: DeepPartial<T>, fields: (keyof T)[]): TypeormFilter<T> {
@@ -97,14 +97,6 @@ export class TypeormRepository<Entity> {
     const missing = results.find((r) => r === null);
     if (missing) throw new NotFoundException(options?.notFoundMessage || "One or more entities not found");
     return results as Entity[];
-  }
-
-  async delete(filter: TypeormFilter<Entity>): Promise<void> {
-    await this.repository.delete(filter);
-  }
-
-  async deleteMultiple(filters: TypeormFilter<Entity>[]): Promise<void> {
-    await Promise.all(filters.map((f) => this.repository.delete(f)));
   }
 
   async get(filter: TypeormFilter<Entity>, options: TypeormQueryOptions<Entity> = {}): Promise<Entity | null> {
@@ -179,12 +171,64 @@ export class TypeormRepository<Entity> {
     };
   }
 
+  async deleteOrThrow(filter: TypeormFilter<Entity>, notFoundMessage = "Entity not found"): Promise<void> {
+    const result = await this.repository.delete(filter);
+    if (result.affected === 0) {
+      throw new NotFoundException(notFoundMessage);
+    }
+  }
+
+  async softDeleteOrThrow(filter: TypeormFilter<Entity>, notFoundMessage = "Entity not found"): Promise<void> {
+    const result = await this.repository.softDelete(filter);
+    if (result.affected === 0) {
+      throw new NotFoundException(notFoundMessage);
+    }
+  }
+
+  async delete(filter: TypeormFilter<Entity>): Promise<void> {
+    await this.repository.delete(filter);
+  }
+
+  async deleteMultiple(filters: TypeormFilter<Entity>[]): Promise<void> {
+    await Promise.all(filters.map((f) => this.repository.delete(f)));
+  }
+
   async softDelete(filter: TypeormFilter<Entity>): Promise<void> {
     await this.repository.softDelete(filter);
   }
 
+  async softDeleteMultiple(filters: TypeormFilter<Entity>[]): Promise<void> {
+    await Promise.all(filters.map((f) => this.repository.softDelete(f)));
+  }
+
   async restore(filter: TypeormFilter<Entity>): Promise<void> {
     await this.repository.restore(filter);
+  }
+
+  async count(filter: TypeormFilter<Entity> = {}): Promise<number> {
+    return this.repository.count({ where: filter });
+  }
+
+  async exists(filter: TypeormFilter<Entity> = {}): Promise<boolean> {
+    return this.repository.exist({ where: filter });
+  }
+
+  async countDeleted(filter: TypeormFilter<Entity> = {}): Promise<number> {
+    return this.repository.count({ where: filter, withDeleted: true });
+  }
+
+  async existsDeleted(filter: TypeormFilter<Entity> = {}): Promise<boolean> {
+    const count = await this.repository.count({ where: filter, withDeleted: true });
+    return count > 0;
+  }
+
+  async countAll(): Promise<number> {
+    return this.repository.count({ withDeleted: true });
+  }
+
+  async existsAll(): Promise<boolean> {
+    const count = await this.repository.count({ withDeleted: true });
+    return count > 0;
   }
 
   private async checkUniqueConstraint(filter: TypeormFilter<Entity>, options?: UniqueCheckOption<Entity>) {
