@@ -29,7 +29,7 @@ type UniqueCheckOption<Entity> = {
 
 @Injectable()
 export class RepositoryService<Entity> {
-  constructor(private readonly repository: Repository<Entity>) {}
+  constructor(protected readonly repository: Repository<Entity>) {}
 
   private buildFilterFromFields<T>(data: DeepPartial<T>, fields: (keyof T)[]): TypeormFilter<T> {
     return Object.fromEntries(fields.map((field) => [field, data[field as keyof DeepPartial<T>]])) as TypeormFilter<T>;
@@ -232,7 +232,7 @@ export class RepositoryService<Entity> {
   }
 
   private async checkUniqueConstraint(filter: TypeormFilter<Entity>, options?: UniqueCheckOption<Entity>) {
-    const exists = await this.repository.exist({ where: filter });
+    const exists = await this.repository.exists({ where: filter });
     if (exists) {
       throw new Error(options?.message || `Duplicate entry for fields: ${options?.fields?.join(", ")}`);
     }
