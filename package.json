@@ -1,7 +1,7 @@
 {
   "name": "@duongtrungnguyen/micro-commerce",
   "author": "Duong Trung Nguyen",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "description": "Helper library for zada e-commerce platform project",
   "license": "MIT",
   "engines": {
