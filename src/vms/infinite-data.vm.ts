@@ -4,6 +4,6 @@ export class InfiniteDataVM<T = any> {
   @ApiProperty({ type: Array as () => T[] })
   data: T[];
 
-  @ApiProperty({ type: Number, example: 2 })
+  @ApiProperty({ type: Number, required: false, example: 2 })
   nextPage?: number;
 }
