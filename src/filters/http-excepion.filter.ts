@@ -14,7 +14,7 @@ export class HttpExceptionsFilter implements ExceptionFilter {
     const i18n = I18nContext.current(host)!;
 
     let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-    let message: string = i18n.t("db.internal_server_error");
+    let message: string = i18n?.t("db.internal_server_error");
 
     if (exception instanceof HttpException) {
       const res = exception.getResponse();
@@ -24,7 +24,7 @@ export class HttpExceptionsFilter implements ExceptionFilter {
       } else {
         const objRes = res as Record<string, any>;
         if (Array.isArray(objRes.message)) {
-          message = objRes.message.map((msg) => i18n.t(msg)).join(" ");
+          message = objRes.message.map((msg) => this.i18nText(i18n, msg)).join(" ");
         } else {
           message = objRes.message;
         }
@@ -73,6 +73,12 @@ export class HttpExceptionsFilter implements ExceptionFilter {
     });
   }
 
+  private i18nText(i18n: I18nContext, fullKey: string) {
+    const [key, argsStr] = fullKey.split("|"); /// for validation key with format: keyname|{key: value}
+
+    return i18n?.t(key, { args: JSON.parse(argsStr || "{}") });
+  }
+
   private mapGrpcCodeToHttp(code: number): number {
     const codeMap = {
       [GrpcStatus.OK]: HttpStatus.OK,
@@ -112,7 +118,7 @@ export class HttpExceptionsFilter implements ExceptionFilter {
     if (code && pgErrorMap[code]) {
       return {
         status: pgErrorMap[code].status,
-        message: i18n.t(pgErrorMap[code].key),
+        message: i18n?.t(pgErrorMap[code].key),
       };
     }
 
@@ -120,19 +126,19 @@ export class HttpExceptionsFilter implements ExceptionFilter {
       if (rawMessage.includes("duplicate key value violates unique constraint")) {
         return {
           status: HttpStatus.CONFLICT,
-          message: i18n.t("db.unique_constraint"),
+          message: i18n?.t("db.unique_constraint"),
         };
       }
       if (rawMessage.includes("violates foreign key constraint")) {
         return {
           status: HttpStatus.CONFLICT,
-          message: i18n.t("db.foreign_key_constraint"),
+          message: i18n?.t("db.foreign_key_constraint"),
         };
       }
       if (rawMessage.includes("null value in column") && rawMessage.includes("violates not-null constraint")) {
         return {
           status: HttpStatus.BAD_REQUEST,
-          message: i18n.t("db.not_null_constraint"),
+          message: i18n?.t("db.not_null_constraint"),
         };
       }
     }
